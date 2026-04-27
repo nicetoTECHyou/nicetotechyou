@@ -12,7 +12,7 @@
 ### 🚀 Aktuelle Projekte
 * **Virtual Club MegaProjekt** - OBS Stream Overlay mit voll Animiertem Club Feeling Lightshow , Animierten tanzenden Avataren und einem Sound & Video Board mit Queue und YT Embed Wiedergabe , alles steuerbar per Twitch Chat.
 * **RouteSync** - Routenplaner für Elektro Fahrzeuge.
-* **TwitchCoPilot** - Navi für Elektro Fahrzeuge.
+* **TwitchCoPilot** - Navi für Elektro Fahrzeuge mit Twitch Chat anbindung für navigieren durch Mod / Chat Commands.
 * **RouteSync-POI-Data-Worldwide** - Datenbank für das Navi & Routenplaner.
 
 

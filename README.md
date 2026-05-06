@@ -18,12 +18,6 @@
 
 ---
 
-### 📊 GitHub Stats
-![Deine Stats](https://github-readme-stats.vercel.app/api?username=nicetotechyou&show_icons=true&theme=radical)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=nicetotechyou&layout=compact&theme=radical)
-
----
-
 ### 📫 Kontakt
 * **Website:** [nicetotechyou.github.io](https://nicetotechyou.github.io/)
 

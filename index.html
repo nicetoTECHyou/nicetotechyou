@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timo W. | Hacked Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Markdown Parser CDN hinzugefügt, um README in HTML umzuwandeln -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- GLOBAL STYLES & SCROLLBAR --- */
+        body { font-family: 'Rajdhani', sans-serif; background-color: #050505; color: #c0c0c0; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #00ff41; border-radius: 4px; }
+        .font-mono-hack { font-family: 'Share Tech Mono', monospace; }
+
+        /* --- MATRIX CANVAS --- */
+        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; opacity: 0.15; pointer-events: none; }
+
+        /* --- SCANLINES --- */
+        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; pointer-events: none; z-index: 999; opacity: 0.3; }
+
+        /* --- GLITCH EFFECT --- */
+        .glitch { position: relative; color: #fff; font-size: 4rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+        .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .glitch::before { color: #00ff41; animation: glitch-anim-1 2s infinite linear alternate-reverse; clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%); }
+        .glitch::after { color: #00d4ff; animation: glitch-anim-2 2s infinite linear alternate-reverse; clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%); }
+        @keyframes glitch-anim-1 { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(-3px, -3px); } 60% { transform: translate(3px, 3px); } 80% { transform: translate(3px, -3px); } 100% { transform: translate(0); } }
+        @keyframes glitch-anim-2 { 0% { transform: translate(0); } 20% { transform: translate(3px, -3px); } 40% { transform: translate(3px, 3px); } 60% { transform: translate(-3px, -3px); } 80% { transform: translate(-3px, 3px); } 100% { transform: translate(0); } }
+
+        /* --- NEON GLOW --- */
+        .neon-border { border: 1px solid rgba(0, 255, 65, 0.3); box-shadow: 0 0 10px rgba(0, 255, 65, 0.1), inset 0 0 10px rgba(0, 255, 65, 0.05); transition: all 0.3s ease; }
+        .neon-border:hover { border-color: rgba(0, 255, 65, 0.8); box-shadow: 0 0 20px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1); }
+
+        /* --- PROGRESS BARS --- */
+        .progress-bg { background: #1a1a1a; border: 1px solid #333; }
+        .progress-fill { background: linear-gradient(90deg, #00ff41, #00d4ff); box-shadow: 0 0 10px #00ff41; height: 100%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* --- TYPING CURSOR --- */
+        .typing-cursor::after { content: '|'; color: #00ff41; animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* --- REPO CARD & EMBED --- */
+        .repo-card { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(5px); border-left: 3px solid #00ff41; transition: all 0.3s ease; cursor: pointer; }
+        .repo-card:hover { background: rgba(0, 255, 65, 0.05); transform: translateX(5px); }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+        /* --- README INLINE STYLES (Damit es im Dark Mode gut aussieht) --- */
+        .readme-embedded {
+            background: #0d0d0d;
+            border: 1px solid #333;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 4px;
+            max-height: 500px;
+            overflow-y: auto;
+            color: #c0c0c0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .readme-embedded h1 { font-size: 1.5rem; color: #00ff41; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
+        .readme-embedded h2 { font-size: 1.2rem; color: #00d4ff; margin-top: 20px; margin-bottom: 10px; }
+        .readme-embedded a { color: #00ff41; text-decoration: underline; }
+        .readme-embedded code { background: #1a1a1a; padding: 2px 6px; border-radius: 3px; color: #ff79c6; font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; }
+        .readme-embedded pre { background: #1a1a1a; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #333; }
+        .readme-embedded pre code { background: transparent; padding: 0; color: #f8f8f2; }
+        .readme-embedded ul, .readme-embedded ol { padding-left: 25px; }
+        .readme-embedded li { margin-bottom: 5px; }
+        .readme-embedded img { max-width: 100%; border-radius: 4px; border: 1px solid #333; }
+        
+        .readme-loader { color: #00ff41; font-size: 0.8rem; display: flex; align-items: center; gap: 10px; }
+    </style>
+</head>
+<body class="font-mono-hack">
+
+    <canvas id="matrix-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 bg-black/90 border-b border-green-500/30 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-2">
+                <span class="text-green-400 text-xl">></span>
+                <span class="text-white font-bold tracking-widest text-lg">nicetoTECHyou</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm tracking-wider text-gray-400">
+                <a href="#about" class="hover:text-green-400 transition-colors">$ about_me</a>
+                <a href="#skills" class="hover:text-green-400 transition-colors">$ skills</a>
+                <a href="#repos" class="hover:text-green-400 transition-colors">$ exploits</a>
+            </div>
+            <div class="text-green-400 text-sm hidden md:block">root@kassel:~$</div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
+        <p class="text-green-400 mb-4 tracking-[0.3em] text-sm uppercase">System infiltrated. Welcome to the mainframe.</p>
+        <h1 class="glitch mb-6" data-text="Timo W.">Timo W.</h1>
+        <div class="h-8 mb-10">
+            <p id="typing-text" class="text-xl text-gray-300 typing-cursor"></p>
+        </div>
+        <a href="#repos" class="neon-border px-8 py-3 text-green-400 tracking-widest hover:bg-green-400/10 transition-all">
+            [ ACCESS REPOSITORIES ]
+        </a>
+    </section>
+
+    <!-- ABOUT ME -->
+    <section id="about" class="py-24 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="neon-border bg-black/50 p-1 rounded-sm">
+                <div class="bg-gray-900 border-b border-gray-800 px-4 py-2 flex items-center space-x-2">
+                    <div class="terminal-dot bg-red-500"></div>
+                    <div class="terminal-dot bg-yellow-500"></div>
+                    <div class="terminal-dot bg-green-500"></div>
+                    <span class="text-gray-500 text-xs ml-2">root@kassel:~/about_me# cat profile.txt</span>
+                </div>
+                <div class="p-8 text-lg leading-relaxed">
+                    <p class="text-green-400 mb-2">$ loading identity...</p>
+                    <p class="text-white mb-4">Name: <span class="text-cyan-400">Timo W.</span></p>
+                    <p class="text-white mb-4">Location: <span class="text-cyan-400">Kassel</span></p>
+                    <p class="text-white mb-6">Age: <span class="text-cyan-400">45</span></p>
+                    <p class="text-green-400 mb-2">$ loading bio...</p>
+                    <p class="text-gray-300 mb-2">> Ich bin kein Skript-Kiddie. Mit 45 Jahren bringt man Lebenserfahrung in den Code ein. Meine Projekte auf GitHub sind nicht nur Zeilen, sondern lösen echte Probleme.</p>
+                    <p class="text-gray-300">> Willkommen auf meiner Terminal-Oberfläche. Kein lästiges GitHub-Geclicke mehr. Alles wird hier live aus der API injected. Klick auf ein Repo, um die README zu laden.</p>
+                    <p class="text-green-400 mt-6">$ execution finished.<span class="typing-cursor"></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="py-24 px-6 bg-black/40">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl text-white mb-2 tracking-widest">// SYSTEM_ANALYSIS</h2>
+            <p class="text-green-400 mb-12 text-sm">Scanning GitHub Repositories for language distribution...</p>
+            <div id="skills-container">
+                <div class="text-gray-500 flex items-center space-x-2">
+                    <svg class="animate-spin h-5 w-5 text-green-400" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>Fetching data from api.github.com...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REPOS -->
+    <section id="repos" class="py-24 px-6">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl text-white mb-2 tracking-widest">// INJECTED_EXPLOITS</h2>
+            <p class="text-green-400 mb-12 text-sm">Klicke auf ein Repository, um die README.md direkt hier zu entschlüsseln.</p>
+            <div id="repos-container" class="space-y-6">
+                <div class="text-gray-500 flex items-center space-x-2">
+                    <svg class="animate-spin h-5 w-5 text-green-400" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>Cloning repositories into local DOM...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-green-500/20 py-8 text-center text-gray-600 text-sm tracking-wider">
+        <p>Connection terminated. &copy; 2024 Timo W. / nicetoTECHyou</p>
+        <p class="mt-2 text-gray-700">[EOF]</p>
+    </footer>
+
+    <script>
+        // --- 1. MATRIX RAIN ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01';
+        const fontSize = 14; const columns = canvas.width / fontSize; const drops = [];
+        for(let x = 0; x < columns; x++) drops[x] = 1; 
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0'; ctx.font = fontSize + 'px monospace';
+            for(let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 35);
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+        // --- 2. TYPING EFFECT ---
+        const typingElement = document.getElementById('typing-text');
+        const textArray = ['Fullstack Developer // System Architect // Kassel, DE', 'Injecting clean code into messy realities.', 'Age: 45 // Experience: Read-only memory upgraded.'];
+        let textIndex = 0, charIndex = 0, isDeleting = false;
+        function typeEffect() {
+            const currentText = textArray[textIndex];
+            typingElement.textContent = currentText.substring(0, isDeleting ? --charIndex : ++charIndex);
+            let speed = isDeleting ? 30 : 60;
+            if (!isDeleting && charIndex === currentText.length) { speed = 2000; isDeleting = true; } 
+            else if (isDeleting && charIndex === 0) { isDeleting = false; textIndex = (textIndex + 1) % textArray.length; speed = 500; }
+            setTimeout(typeEffect, speed);
+        }
+        typeEffect();
+
+        // --- 3. GITHUB LOGIC ---
+        const githubUser = 'nicetoTECHyou';
+        const apiURL = `https://api.github.com/users/${githubUser}/repos?per_page=100&sort=updated`;
+        
+        // Speichert, welches Repo aktuell offen ist
+        let activeRepo = null; 
+
+        fetch(apiURL).then(r => r.json()).then(data => {
+            if (data.message) throw new Error("API Error");
+            renderSkills(data);
+            renderRepos(data);
+        }).catch(e => {
+            document.getElementById('skills-container').innerHTML = `<p class="text-red-500">[ERROR] Bypassing firewall failed.</p>`;
+            document.getElementById('repos-container').innerHTML = `<p class="text-red-500">[ERROR] Repos could not be embedded.</p>`;
+        });
+
+        function renderSkills(repos) {
+            const langCount = {}; let total = 0;
+            repos.forEach(r => { if (r.language) { langCount[r.language] = (langCount[r.language] || 0) + 1; total++; } });
+            const sortedLangs = Object.entries(langCount).sort((a, b) => b[1] - a[1]);
+            let html = '';
+            sortedLangs.forEach(([lang, count]) => {
+                const pct = ((count / total) * 100).toFixed(1);
+                html += `<div class="mb-6"><div class="flex justify-between mb-2 text-sm"><span class="text-cyan-400 font-bold">[${lang}]</span><span class="text-gray-400">${count} Projects (${pct}%)</span></div><div class="progress-bg w-full h-3 rounded-sm overflow-hidden"><div class="progress-fill rounded-sm" style="width: 0%;" data-width="${pct}%"></div></div></div>`;
+            });
+            document.getElementById('skills-container').innerHTML = html;
+            setTimeout(() => document.querySelectorAll('.progress-fill').forEach(bar => bar.style.width = bar.getAttribute('data-width')), 100);
+        }
+
+        function renderRepos(repos) {
+            let html = '';
+            repos.forEach(repo => {
+                const langColors = {'JavaScript':'#f1e05a','Python':'#3572A5','HTML':'#e34c26','CSS':'#563d7c','PHP':'#4F5D95','Ruby':'#701516','Java':'#b07219','TypeScript':'#3178c6','Shell':'#89e051','Dockerfile':'#384d54'};
+                const langColor = langColors[repo.language] || '#00ff41';
+                const date = new Date(repo.updated_at).toLocaleDateString('de-DE');
+                
+                html += `
+                <div class="repo-card p-6 rounded-r-sm" onclick="toggleReadme('${repo.name}', this)">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                        <h3 class="text-xl text-white font-bold tracking-wide flex items-center">
+                            <span class="text-green-400 mr-2 text-sm">repo://</span> ${repo.name}
+                        </h3>
+                        <div class="flex space-x-4 text-xs text-gray-500 mt-2 md:mt-0">
+                            <span class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full inline-block" style="background:${langColor}"></span><span>${repo.language || 'N/A'}</span></span>
+                            <span>⭐ ${repo.stargazers_count}</span>
+                            <span>🔄 ${repo.forks_count}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">${repo.description || 'No description provided. Classified data.'}</p>
+                    
+                    ${repo.topics && repo.topics.length > 0 ? `<div class="flex flex-wrap gap-2 mb-4">${repo.topics.map(t => `<span class="text-xs px-2 py-1 border border-cyan-800 text-cyan-400 rounded-sm">${t}</span>`).join('')}</div>` : ''}
+
+                    <div class="text-xs text-gray-600 border-t border-gray-800 pt-4 flex justify-between">
+                        <span>Last pushed: ${date}</span>
+                        <span class="text-cyan-400">[ CLICK TO DECRYPT README ]</span>
+                    </div>
+
+                    <!-- Hier wird die README reingeladen -->
+                    <div id="readme-${repo.name}" class="hidden"></div>
+                </div>`;
+            });
+            document.getElementById('repos-container').innerHTML = html;
+        }
+
+        // --- 4. README FETCH & DECODE LOGIK ---
+        async function toggleReadme(repoName, cardElement) {
+            const container = document.getElementById(`readme-${repoName}`);
+            
+            // Wenn es schon offen ist, schließe es
+            if (activeRepo === repoName) {
+                container.classList.add('hidden');
+                container.innerHTML = ''; // Speicher freigeben
+                activeRepo = null;
+                return;
+            }
+            
+            // Schließe ein eventuell anderes offenes Repo
+            if (activeRepo) {
+                const oldContainer = document.getElementById(`readme-${activeRepo}`);
+                if(oldContainer) { oldContainer.classList.add('hidden'); oldContainer.innerHTML = ''; }
+            }
+
+            // Lade-Animation anzeigen
+            container.classList.remove('hidden');
+            container.innerHTML = `<div class="readme-loader"><svg class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Decrypting README.md from GitHub API...</div>`;
+            activeRepo = repoName;
+
+            try {
+                // API Abruf der README
+                const res = await fetch(`https://api.github.com/repos/${githubUser}/${repoName}/readme`);
+                if (!res.ok) throw new Error("No Readme found");
+                const data = await res.json();
+                
+                // Base64 Decode (mit UTF-8 Support für deutsche Sonderzeichen)
+                const decodedMarkdown = decodeURIComponent(escape(window.atob(data.content.replace(/\n/g, ''))));
+                
+                // Markdown zu HTML umwandeln
+                const htmlContent = marked.parse(decodedMarkdown);
+                
+                // Styling hinzufügen und einfügen
+                container.innerHTML = `<div class="readme-embedded">${htmlContent}</div>`;
+                
+                // Smooth scroll zur geöffneten Readme
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            } catch (error) {
+                container.innerHTML = `<div class="text-red-500 text-sm mt-4">[ERROR] No README.md found in this repository.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

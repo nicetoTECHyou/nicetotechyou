@@ -19,7 +19,8 @@
 ---
 
 ### 📫 Kontakt
-* **Website:** [nicetotechyou.github.io](https://nicetotechyou.github.io/)
+* **Website:** [[nicetotechyou.github.io]](https://nicetotechyou.github.io/nicetotechyou/)
 
 
 > "The best way to predict the future is to invent it."
+
